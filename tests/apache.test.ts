@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { analyze } from "../src/index.js";
 
 
-describe("Apache HTTP Access parser", () => {
+describe("Apache Access parser", () => {
   it("should parse a valid Apache access log entry", () => {
     const log =
       '127.0.0.1 - - [23/Jul/2026:18:45:11 +0000] "GET /admin HTTP/1.1" 404 512';

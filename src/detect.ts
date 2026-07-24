@@ -1,10 +1,11 @@
-import { httpParser } from "./parsers/http.js";
+import { apacheParser } from "./parsers/apache.js";
 import { syslogParser } from "./parsers/syslog.js";
 
 import type {
   DetectionResult,
   ParserDefinition,
 } from "./parser.js";
+
 
 /**
  * Registered parsers.
@@ -17,8 +18,9 @@ import type {
  */
 const PARSERS: readonly ParserDefinition[] = [
   syslogParser,
-  httpParser,
+  apacheParser,
 ];
+
 
 /**
  * Detects the parser responsible
@@ -32,6 +34,7 @@ export function detect(
 ): DetectionResult | null {
   const line = log.trim();
 
+
   for (const parser of PARSERS) {
     if (parser.pattern.test(line)) {
       return {
@@ -40,6 +43,7 @@ export function detect(
       };
     }
   }
+
 
   return null;
 }
