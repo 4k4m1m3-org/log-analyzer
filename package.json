@@ -1,6 +1,6 @@
 {
   "name": "@4k4m1m3/log-analyzer",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Lightweight TypeScript log parser for Linux, Apache and Nginx.",
   "keywords": [
     "log",
