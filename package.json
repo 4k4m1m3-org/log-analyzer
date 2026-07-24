@@ -1,0 +1,52 @@
+{
+  "name": "@4k4m1m3/log-analyzer",
+  "version": "0.1.0",
+  "description": "Lightweight TypeScript log parser for Linux, Apache and Nginx.",
+  "keywords": [
+    "log",
+    "parser",
+    "syslog",
+    "apache",
+    "nginx",
+    "security",
+    "typescript"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/4k4m1m3-org/log-analyzer.git"
+  },
+  "homepage": "https://github.com/4k4m1m3-org/log-analyzer#readme",
+  "bugs": {
+    "url": "https://github.com/4k4m1m3-org/log-analyzer/issues"
+  },
+  "license": "MIT",
+  "author": "Wuilmer Bolivar",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "prepare": "npm run build"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^26.1.1",
+    "eslint": "^10.7.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.65.0",
+    "vitest": "^4.1.10"
+  }
+}
