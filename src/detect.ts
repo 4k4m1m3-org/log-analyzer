@@ -1,4 +1,5 @@
 import { apacheParser } from "./parsers/apache.js";
+import { nginxParser } from "./parsers/nginx.js";
 import { syslogParser } from "./parsers/syslog.js";
 
 import type {
@@ -19,6 +20,7 @@ import type {
 const PARSERS: readonly ParserDefinition[] = [
   syslogParser,
   apacheParser,
+  nginxParser,
 ];
 
 
