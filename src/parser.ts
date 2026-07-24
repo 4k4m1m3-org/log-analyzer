@@ -1,48 +1,55 @@
+import type {
+  LogEntry,
+  LogSource,
+} from "./types.js";
+
 /**
  * Internal parser function.
  *
  * Every parser receives a raw log line
  * and returns a normalized LogEntry.
  */
-export type Parser = (log: string) => import("./types.js").LogEntry;
+export type Parser = (
+  log: string,
+) => LogEntry;
 
 /**
- * Definition required by every parser module.
- *
- * Each parser is responsible for:
- * - identifying its own format
- * - parsing the log content
+ * Definition required by every parser.
  */
 export interface ParserDefinition {
   /**
    * Public source identifier.
    */
-  source: import("./types.js").LogSource;
+  source: LogSource;
 
   /**
-   * Pattern used to detect the log format.
+   * Determines whether this parser
+   * supports the provided log.
    */
-  pattern: RegExp;
+  canParse(
+    log: string,
+  ): boolean;
 
   /**
-   * Function that converts raw text
-   * into a normalized LogEntry.
+   * Converts raw text into
+   * a normalized LogEntry.
    */
   parse: Parser;
 }
 
 /**
- * Result returned internally after detection.
+ * Result returned internally
+ * after parser detection.
  */
 export interface DetectionResult {
   /**
    * Detected source type.
    */
-  source: import("./types.js").LogSource;
+  source: LogSource;
 
   /**
-   * Parser responsible for processing
-   * the detected log.
+   * Parser responsible for
+   * processing the log.
    */
   parser: Parser;
 }
