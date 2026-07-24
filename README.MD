@@ -4,7 +4,7 @@
 
 [![npm downloads](https://img.shields.io/npm/dm/@4k4m1m3/log-analyzer)](https://www.npmjs.com/package/@4k4m1m3/log-analyzer)
 
-[![GitHub stars](https://img.shields.io/github/stars/4k4m1m3-org/log-analyzer?style=social)](https://github.com/4k4m1m3-org/log-analyzer)0
+[![GitHub stars](https://img.shields.io/github/stars/4k4m1m3-org/log-analyzer?style=social)](https://github.com/4k4m1m3-org/log-analyzer)
 
 ![Tests](https://github.com/4k4m1m3-org/log-analyzer/actions/workflows/test.yml/badge.svg)
 
