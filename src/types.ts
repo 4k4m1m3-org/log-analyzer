@@ -3,7 +3,8 @@
  */
 export type LogSource =
   | "linux-syslog"
-  | "http-access";
+  | "apache-access"
+  | "nginx-access";
 
 /**
  * Normalized severity levels.
