@@ -1,31 +1,37 @@
-import type { ParserDefinition } from "../parser.js";
 import type {
   LogEntry,
   LogSeverity,
 } from "../types.js";
 
+import type {
+  ParserDefinition,
+} from "../parser.js";
 
 /**
- * Apache Common / Combined Access Log format.
+ * HTTP Access Log pattern.
+ *
+ * Compatible with:
+ * - Apache Common Log Format
+ * - Apache Combined Log Format
+ * - Nginx default access log
  *
  * Example:
  *
- * 127.0.0.1 - - [23/Jul/2026:18:45:11 +0000]
- * "GET /admin HTTP/1.1" 404 512
+ * 192.168.1.20 - - [23/Jul/2026:18:45:11 +0000]
+ * "GET /index.html HTTP/1.1" 200 1024
  */
-const APACHE_PATTERN =
+export const HTTP_ACCESS_PATTERN =
   /^(\S+)\s+\S+\s+\S+\s+\[([^\]]+)\]\s+"([^"]+)"\s+(\d{3})\s+(\S+)/;
 
 
 /**
- * Converts Apache timestamp format
- * into a JavaScript Date object.
+ * Converts HTTP timestamp into a Date.
  *
  * Example:
  *
  * 23/Jul/2026:18:45:11 +0000
  */
-function parseTimestamp(
+function parseHttpTimestamp(
   value: string,
 ): Date | null {
   const normalized = value.replace(
@@ -45,7 +51,7 @@ function parseTimestamp(
  * Maps HTTP status codes into
  * normalized severity levels.
  */
-function detectSeverity(
+function detectHttpSeverity(
   statusCode: number,
 ): LogSeverity {
   if (statusCode >= 500) {
@@ -61,13 +67,9 @@ function detectSeverity(
 
 
 /**
- * Extracts HTTP request information.
- *
- * Example:
- *
- * GET /admin HTTP/1.1
+ * Extracts the HTTP request.
  */
-function extractRequest(
+function extractHttpRequest(
   request: string,
 ): string {
   return request.trim();
@@ -75,27 +77,28 @@ function extractRequest(
 
 
 /**
- * Parses Apache access logs.
+ * Parses HTTP Access Logs.
+ *
+ * Compatible with Common Log Format
+ * and Combined Log Format used by
+ * Apache HTTP Server and Nginx.
  */
-function parseApache(
+function parseHttpAccess(
   log: string,
 ): LogEntry {
-  const match = APACHE_PATTERN.exec(
+  const match = HTTP_ACCESS_PATTERN.exec(
     log.trim(),
   );
 
-
   if (!match) {
     throw new Error(
-      "Invalid Apache access log format",
+      "Invalid HTTP Access Log format",
     );
   }
-
 
   const timestamp = match[2];
   const request = match[3];
   const status = match[4];
-
 
   if (
     !timestamp ||
@@ -103,32 +106,29 @@ function parseApache(
     !status
   ) {
     throw new Error(
-      "Incomplete Apache access log data",
+      "Incomplete HTTP Access Log data",
     );
   }
-
 
   const statusCode = Number(status);
 
-
   if (Number.isNaN(statusCode)) {
     throw new Error(
-      "Invalid Apache HTTP status code",
+      "Invalid HTTP status code",
     );
   }
 
-
   return {
-    source: "apache-access",
+    source: "http-access",
 
     timestamp:
-      parseTimestamp(timestamp),
+      parseHttpTimestamp(timestamp),
 
     severity:
-      detectSeverity(statusCode),
+      detectHttpSeverity(statusCode),
 
     message:
-      extractRequest(request),
+      extractHttpRequest(request),
 
     raw: log,
   };
@@ -136,12 +136,18 @@ function parseApache(
 
 
 /**
- * Apache Access Log parser definition.
+ * HTTP Access Log parser definition.
  */
-export const apacheParser: ParserDefinition = {
-  source: "apache-access",
+export const httpAccessParser: ParserDefinition = {
+  source: "http-access",
 
-  pattern: APACHE_PATTERN,
+  canParse(
+    log: string,
+  ): boolean {
+    return HTTP_ACCESS_PATTERN.test(
+      log.trim(),
+    );
+  },
 
-  parse: parseApache,
+  parse: parseHttpAccess,
 };

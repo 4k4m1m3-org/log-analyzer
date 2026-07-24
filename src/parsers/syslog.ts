@@ -1,5 +1,9 @@
 import type { ParserDefinition } from "../parser.js";
-import type { LogEntry, LogSeverity } from "../types.js";
+import type {
+  LogEntry,
+  LogSeverity,
+} from "../types.js";
+
 
 /**
  * Matches Linux Syslog format.
@@ -17,6 +21,7 @@ import type { LogEntry, LogSeverity } from "../types.js";
  */
 const SYSLOG_PATTERN =
   /^([A-Z][a-z]{2})\s+(\d{1,2})\s(\d{2}:\d{2}:\d{2})\s+(\S+)\s+(.*)$/;
+
 
 /**
  * Converts syslog timestamp into Date.
@@ -39,6 +44,7 @@ function parseTimestamp(
     ? null
     : date;
 }
+
 
 /**
  * Detects normalized severity from message content.
@@ -78,6 +84,7 @@ function detectSeverity(
   return "info";
 }
 
+
 /**
  * Removes process metadata from syslog payload.
  *
@@ -99,6 +106,7 @@ function normalizeMessage(
     )
     .trim();
 }
+
 
 /**
  * Parses a Linux Syslog line.
@@ -161,11 +169,19 @@ function parseSyslog(
   };
 }
 
+
 /**
  * Linux Syslog parser definition.
+ *
+ * Uses capability detection instead
+ * of exposing the internal regex.
  */
 export const syslogParser: ParserDefinition = {
   source: "linux-syslog",
-  pattern: SYSLOG_PATTERN,
+
+  canParse(log: string): boolean {
+    return SYSLOG_PATTERN.test(log.trim());
+  },
+
   parse: parseSyslog,
 };
